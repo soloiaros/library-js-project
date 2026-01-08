@@ -8,7 +8,7 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
   padding: 1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 h1 {
@@ -69,9 +69,50 @@ h1 {
 .button-container {
   grid-column: span 2;
   display: inline-grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr 1fr auto auto;
   justify-items: start;
   gap: .5rem;
+}
+
+.button-container label {
+  align-self: center;
+  display: grid;
+  grid-template-columns: 1rem auto;
+  gap: .7rem;
+  align-items: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  user-select: none;
+}
+
+.button-container input[type="checkbox"] {
+  appearance: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 3px solid;
+  display: grid;
+  place-content: center;
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+.button-container input[type="checkbox"]::before {
+  content: '';
+  width: .6rem;
+  height: .6rem;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1rem 1rem #3ea800;
+  border-radius: 2px;
+}
+
+.button-container input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+.button-container label:hover {
+  input[type="checkbox"] {
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+  }
 }
 
 .book-info-dialog[open] {
@@ -132,6 +173,7 @@ h1 {
 
 .button-container button {
   border: 1px solid hsl(from var(--accent-color) h 50% 15% / .5);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .book-info-dialog button,

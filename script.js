@@ -6,6 +6,7 @@ function Book(title, author, yearPublished, genre) {
   this.yearPublished = yearPublished;
   this.genre = genre;
   this.id = crypto.randomUUID();
+  this.read = false;
 }
 
 function addNewBook (title, author, yearPublished, genre) {
@@ -67,6 +68,7 @@ dialog.addEventListener(
       }
       displayBooks();
     }
+    [titleInput.value, authorInput.value, yearInput.value, genreSelect.value] = ["", "", "2010", "Fiction"];
   }
 )
 
@@ -90,9 +92,11 @@ function displayBooks() {
 
     let buttonContainer = document.createElement('div');
     buttonContainer.classList.add('button-container');
-    let [editButton, deleteButton, copyButton] = [document.createElement('button'), document.createElement('button'), document.createElement('button')];
+    let [editButton, deleteButton, copyButton, readToggleLabel] = [document.createElement('button'), document.createElement('button'), document.createElement('button'), document.createElement('label')];
     [editButton.innerText, deleteButton.innerText, copyButton.innerText] = ['Edit', 'Delete', 'Copy'];
-    for (let button of [copyButton, editButton, deleteButton]) {
+    readToggleLabel.setAttribute('for', `read-toggle-${book.id}`);
+    readToggleLabel.innerHTML = `<input ${'checked'.repeat(Number(book.read))} type="checkbox" id="read-toggle-${book.id}" name="read">Read`;
+    for (let button of [copyButton, readToggleLabel, editButton, deleteButton]) {
       button.setAttribute('data-book-id', book.id);
       buttonContainer.appendChild(button);
     }
@@ -100,7 +104,7 @@ function displayBooks() {
     deleteButton.addEventListener(
       'click',
       () => {
-        bookIndex = myLibrary.indexOf(book);
+        let bookIndex = myLibrary.indexOf(book);
         myLibrary.splice(bookIndex, 1);
         displayBooks();
       }
@@ -115,6 +119,21 @@ function displayBooks() {
         genreSelect.value = book.genre;
         bookId.value = book.id;
         dialog.showModal();
+      }
+    )
+
+    readToggleLabel.addEventListener(
+      'click',
+      () => {
+        book.read = !book.read;
+      }
+    )
+
+    copyButton.addEventListener(
+      'click',
+      () => {
+        const bookInfo = `${book.title} by ${book.author}, published in the year ${book.yearPublished}. The genre of the book is ${book.genre}`;
+        navigator.clipboard.write(bookInfo);
       }
     )
 

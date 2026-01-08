@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Your Books</h1>
+  <div class="book-display">
+  </div>
+  <button>Add new book</button>
+
+  <dialog class="book-info-dialog">
+    <form action="" method="dialog">
+      <label for="title">Title
+        <input required type="text" id="title" name="title">
+      </label>
+      <label for="author">Author
+        <input required type="text" id="author" name="author">
+      </label>
+      <label for="release-year">Release Year
+        <input required type="number" max="2026" step="1" value="2010" id="release-year" name="release-year">
+      </label>
+      <label for="genre">Book's Genre
+        <select name="genre" id="genre">
+          <option value="fiction">Fiction</option>
+          <option value="scifi">Sci-Fi</option>
+          <option value="romance">Romance</option>
+          <option value="comedy">Comedy</option>
+          <option value="detective">Detective</option>
+          <option value="history">Historical</option>
+          <option value="selfhelp">Self-Help</option>
+        </select>
+      </label>
+      <button>Add</button>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>

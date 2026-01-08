@@ -158,5 +158,8 @@ function displayBooks() {
 // A temporary solution for setting initial values
 addNewBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", '1997', 'fantasy');
 addNewBook("The Hobbiet", "J. R. R. Tolkien", '1937', 'fantasy');
+addNewBook("Murder on the Orient Express", "Agatha Christie", '1934', 'detective');
+addNewBook("The Hound of the Baskervilles", "Sir A. Conan Doyle", '1902', 'fantasy');
+addNewBook("Heated Rivalry", "Rachel Reid", '2019', 'romance');
 
 displayBooks();

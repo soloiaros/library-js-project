@@ -72,6 +72,7 @@ dialog.addEventListener(
   }
 )
 
+// Rendering the cards
 function displayBooks() {
   const bookshelf = document.querySelector('.book-display');
   bookshelf.innerHTML = "";
@@ -133,7 +134,16 @@ function displayBooks() {
       'click',
       () => {
         const bookInfo = `${book.title} by ${book.author}, published in the year ${book.yearPublished}. The genre of the book is ${book.genre}`;
-        navigator.clipboard.write(bookInfo);
+        let timeout = undefined;
+        navigator.clipboard.writeText(bookInfo);
+
+        const popUpDiv = document.querySelector('.clipboard-popup');
+        popUpDiv.classList.add('showing');
+        if (!timeout) {
+          timeout = setTimeout(() => {
+            popUpDiv.classList.remove('showing');
+          }, 3000);
+        }
       }
     )
 

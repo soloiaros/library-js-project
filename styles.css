@@ -5,7 +5,7 @@
 
 .book-display {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
   padding: 1rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -20,12 +20,13 @@ h1 {
 .book-display > div {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
   border: 2px solid hsl(from var(--accent-color) h 50% 50%);
   border-radius: 6px;
   box-shadow: 0 12px 12px hsl(from var(--accent-color) h 50% 80%);
   gap: .5rem;
   padding: .5rem;
+  background-color: hsl(from var(--accent-color) h s 95%);
 }
 
 .book-display > div:hover {
@@ -34,15 +35,15 @@ h1 {
 }
 
 .book-display > div span {
-  background-color: hsl(from var(--accent-color) h 65% 80%);
+  background-color: hsl(from var(--accent-color) h 50% 90%);
   padding: 1rem;
   border: 1px solid hsl(from var(--accent-color) h 50% 70%);
   border-radius: 4px;
 }
 
-.book-display > div span:hover,
+.button-container button:hover,
 .book-info-dialog button:hover {
-  box-shadow: 3px 3px 3px hsl(from var(--accent-color) h 50% 70%) inset;
+  box-shadow: 3px 3px 3px hsl(from var(--accent-color) h 40% 75%) inset;
   transform: scale(1.005);
 }
 
@@ -63,6 +64,14 @@ h1 {
 .book-display > div span:nth-child(4) {
   grid-column: 2;
   grid-row: 2;
+}
+
+.button-container {
+  grid-column: span 2;
+  display: inline-grid;
+  grid-template-columns: 1fr auto auto;
+  justify-items: start;
+  gap: .5rem;
 }
 
 .book-info-dialog[open] {
@@ -117,15 +126,23 @@ h1 {
 
 .book-info-dialog button {
   grid-column: 1 / 3;
-  align-self: center;
+  place-self: center;
   width: 60%;
-  background-color:hsl(from var(--accent-color) h 50% 80%);
-  padding: 1rem;
-  font-size: 1rem;
-  justify-self: center;
-  border-radius: 6px;
 }
 
-.book-info-dialog button:active {
+.button-container button {
+  border: 1px solid hsl(from var(--accent-color) h 50% 15% / .5);
+}
+
+.book-info-dialog button,
+.button-container button {
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  background-color: hsl(from var(--accent-color) h 65% 80%);
+}
+
+.book-info-dialog button:active,
+.button-container button:active {
   transform: translateX(1px) translateY(1px);
 }

@@ -24,20 +24,6 @@ class Book {
   }
 }
 
-// function addNewBook (title, author, yearPublished, genre) {
-//   let newBook = new Book(title, author, yearPublished, genre);
-//   myLibrary.push(newBook);
-// }
-
-// function updateBook(bookId, title, author, yearPublished, genre) {
-//   const book = myLibrary.find(obj => obj.id === bookId);
-//   book.title = title;
-//   book.author = author;
-//   book.yearPublished = yearPublished;
-//   book.genre = genre;
-// }
-
-
 const ScreenManager = (() => {
   // Handling a modal
   const actionButton = document.querySelector('.book-display + button');

@@ -37,138 +37,143 @@ class Book {
 //   book.genre = genre;
 // }
 
-// Handling a modal
-const actionButton = document.querySelector('.book-display + button');
-const submitButton = document.querySelector('.book-info-dialog button');
-const dialog = document.querySelector('.book-info-dialog');
 
-const titleInput = dialog.querySelector('#title');
-const authorInput = dialog.querySelector('#author');
-const yearInput = dialog.querySelector('#release-year');
-const genreSelect = dialog.querySelector('#genre');
-const bookId = dialog.querySelector('#id');
+const ScreenManager = (() => {
+  // Handling a modal
+  const actionButton = document.querySelector('.book-display + button');
+  const submitButton = document.querySelector('.book-info-dialog button');
+  const dialog = document.querySelector('.book-info-dialog');
 
-yearInput.addEventListener(
-  'focus', () => yearInput.select()
-)
+  const titleInput = dialog.querySelector('#title');
+  const authorInput = dialog.querySelector('#author');
+  const yearInput = dialog.querySelector('#release-year');
+  const genreSelect = dialog.querySelector('#genre');
+  const bookId = dialog.querySelector('#id');
 
-submitButton.addEventListener(
-  'click',
-  (e) => {
-    e.preventDefault();
-    dialog.close([
-      titleInput.value, authorInput.value,
-      yearInput.value, genreSelect.value,
-      bookId.value,
-    ]);
-  }
-)
+  yearInput.addEventListener(
+    'focus', () => yearInput.select()
+  )
 
-actionButton.addEventListener(
-  'click',
-  () => {
-    dialog.showModal();
-  }
-)
-
-dialog.addEventListener(
-  'close',
-  () => {
-    if (dialog.returnValue) {
-      let [title, author, year, genre, bookId] = dialog.returnValue.split(',');
-      if (bookId) {
-        const book = myLibrary[bookId];
-        book.updatedProperties = [title, author, year, genre];
-      } else {
-        new Book(title, author, year, genre);
-      }
-      displayBooks();
+  submitButton.addEventListener(
+    'click',
+    (e) => {
+      e.preventDefault();
+      dialog.close([
+        titleInput.value, authorInput.value,
+        yearInput.value, genreSelect.value,
+        bookId.value,
+      ]);
     }
-    [titleInput.value, authorInput.value, yearInput.value, genreSelect.value] = ["", "", "2010", "Fiction"];
-  }
-)
+  )
 
-// Rendering the cards
-function displayBooks() {
-  const bookshelf = document.querySelector('.book-display');
-  bookshelf.innerHTML = "";
-  for (let book of Object.values(myLibrary)) {
-    let bookCard = document.createElement('div');
-
-    let bookTitle = document.createElement('span');
-    bookTitle.innerText = book.title;
-
-    let bookAuthor = document.createElement('span');
-    bookAuthor.innerText = book.author;
-
-    let bookYear = document.createElement('span');
-    bookYear.innerText = book.yearPublished;
-
-    let bookGenre = document.createElement('span');
-    bookGenre.innerText = book.genre;
-
-    let buttonContainer = document.createElement('div');
-    buttonContainer.classList.add('button-container');
-    let [editButton, deleteButton, copyButton, readToggleLabel] = [document.createElement('button'), document.createElement('button'), document.createElement('button'), document.createElement('label')];
-    [editButton.innerText, deleteButton.innerText, copyButton.innerText] = ['Edit', 'Delete', 'Copy'];
-    readToggleLabel.setAttribute('for', `read-toggle-${book.id}`);
-    readToggleLabel.innerHTML = `<input ${'checked'.repeat(Number(book.read))} type="checkbox" id="read-toggle-${book.id}" name="read">Read`;
-    for (let button of [copyButton, readToggleLabel, editButton, deleteButton]) {
-      button.setAttribute('data-book-id', book.id);
-      buttonContainer.appendChild(button);
+  actionButton.addEventListener(
+    'click',
+    () => {
+      dialog.showModal();
     }
+  )
 
-    deleteButton.addEventListener(
-      'click',
-      () => {
-        delete myLibrary[book.id];
+  dialog.addEventListener(
+    'close',
+    () => {
+      if (dialog.returnValue) {
+        let [title, author, year, genre, bookId] = dialog.returnValue.split(',');
+        if (bookId) {
+          const book = myLibrary[bookId];
+          book.updatedProperties = [title, author, year, genre];
+        } else {
+          new Book(title, author, year, genre);
+        }
         displayBooks();
       }
-    )
-
-    editButton.addEventListener(
-      'click',
-      () => {
-        titleInput.value = book.title;
-        authorInput.value = book.author;
-        yearInput.value = book.yearPublished;
-        genreSelect.value = book.genre;
-        bookId.value = book.id;
-        dialog.showModal();
-      }
-    )
-
-    readToggleLabel.addEventListener(
-      'click',
-      () => {
-        book.toggleRead();
-      }
-    )
-
-    copyButton.addEventListener(
-      'click',
-      () => {
-        const bookInfo = `${book.title} by ${book.author}, published in the year ${book.yearPublished}. The genre of the book is ${book.genre}`;
-        let timeout = undefined;
-        navigator.clipboard.writeText(bookInfo);
-
-        const popUpDiv = document.querySelector('.clipboard-popup');
-        popUpDiv.classList.add('showing');
-        if (!timeout) {
-          timeout = setTimeout(() => {
-            popUpDiv.classList.remove('showing');
-          }, 3000);
-        }
-      }
-    )
-
-    for (let info of [bookTitle, bookAuthor, bookYear, bookGenre]) {
-      bookCard.appendChild(info);
+      [titleInput.value, authorInput.value, yearInput.value, genreSelect.value] = ["", "", "2010", "Fiction"];
     }
-    bookCard.appendChild(buttonContainer);
-    bookshelf.appendChild(bookCard);
+  )
+
+  // Rendering the cards
+  function displayBooks() {
+    const bookshelf = document.querySelector('.book-display');
+    bookshelf.innerHTML = "";
+    for (let book of Object.values(myLibrary)) {
+      let bookCard = document.createElement('div');
+
+      let bookTitle = document.createElement('span');
+      bookTitle.innerText = book.title;
+
+      let bookAuthor = document.createElement('span');
+      bookAuthor.innerText = book.author;
+
+      let bookYear = document.createElement('span');
+      bookYear.innerText = book.yearPublished;
+
+      let bookGenre = document.createElement('span');
+      bookGenre.innerText = book.genre;
+
+      let buttonContainer = document.createElement('div');
+      buttonContainer.classList.add('button-container');
+      let [editButton, deleteButton, copyButton, readToggleLabel] = [document.createElement('button'), document.createElement('button'), document.createElement('button'), document.createElement('label')];
+      [editButton.innerText, deleteButton.innerText, copyButton.innerText] = ['Edit', 'Delete', 'Copy'];
+      readToggleLabel.setAttribute('for', `read-toggle-${book.id}`);
+      readToggleLabel.innerHTML = `<input ${'checked'.repeat(Number(book.read))} type="checkbox" id="read-toggle-${book.id}" name="read">Read`;
+      for (let button of [copyButton, readToggleLabel, editButton, deleteButton]) {
+        button.setAttribute('data-book-id', book.id);
+        buttonContainer.appendChild(button);
+      }
+
+      deleteButton.addEventListener(
+        'click',
+        () => {
+          delete myLibrary[book.id];
+          displayBooks();
+        }
+      )
+
+      editButton.addEventListener(
+        'click',
+        () => {
+          titleInput.value = book.title;
+          authorInput.value = book.author;
+          yearInput.value = book.yearPublished;
+          genreSelect.value = book.genre;
+          bookId.value = book.id;
+          dialog.showModal();
+        }
+      )
+
+      readToggleLabel.addEventListener(
+        'click',
+        () => {
+          book.toggleRead();
+        }
+      )
+
+      copyButton.addEventListener(
+        'click',
+        () => {
+          const bookInfo = `${book.title} by ${book.author}, published in the year ${book.yearPublished}. The genre of the book is ${book.genre}`;
+          let timeout = undefined;
+          navigator.clipboard.writeText(bookInfo);
+
+          const popUpDiv = document.querySelector('.clipboard-popup');
+          popUpDiv.classList.add('showing');
+          if (!timeout) {
+            timeout = setTimeout(() => {
+              popUpDiv.classList.remove('showing');
+            }, 3000);
+          }
+        }
+      )
+
+      for (let info of [bookTitle, bookAuthor, bookYear, bookGenre]) {
+        bookCard.appendChild(info);
+      }
+      bookCard.appendChild(buttonContainer);
+      bookshelf.appendChild(bookCard);
+    }
   }
-}
+
+  return { displayBooks };
+})();
 
 // A temporary solution for setting initial values
 const defaultBooks = [
@@ -179,4 +184,4 @@ const defaultBooks = [
   new Book("Heated Rivalry", "Rachel Reid", '2019', 'romance'),
 ]
 
-displayBooks();
+ScreenManager.displayBooks();

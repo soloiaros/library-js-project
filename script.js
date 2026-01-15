@@ -1,26 +1,41 @@
-const myLibrary = []
+const myLibrary = {}
 
-function Book(title, author, yearPublished, genre) {
-  this.title = title;
-  this.author = author;
-  this.yearPublished = yearPublished;
-  this.genre = genre;
-  this.id = crypto.randomUUID();
-  this.read = false;
+class Book {
+  constructor(title, author, yearPublished, genre) {
+    this.title = title;
+    this.author = author;
+    this.yearPublished = yearPublished;
+    this.genre = genre;
+    this.id = crypto.randomUUID();
+    this.read = false;
+    
+    myLibrary[this.id] = this;
+  }
+
+  set updatedProperties([title, author, yearPublished, genre]) {
+    this.title = title;
+    this.author = author;
+    this.yearPublished = yearPublished;
+    this.genre = genre;
+  }
+
+  toggleRead() {
+    this.read = !this.read;
+  }
 }
 
-function addNewBook (title, author, yearPublished, genre) {
-  let newBook = new Book(title, author, yearPublished, genre);
-  myLibrary.push(newBook);
-}
+// function addNewBook (title, author, yearPublished, genre) {
+//   let newBook = new Book(title, author, yearPublished, genre);
+//   myLibrary.push(newBook);
+// }
 
-function updateBook(bookId, title, author, yearPublished, genre) {
-  const book = myLibrary.find(obj => obj.id === bookId);
-  book.title = title;
-  book.author = author;
-  book.yearPublished = yearPublished;
-  book.genre = genre;
-}
+// function updateBook(bookId, title, author, yearPublished, genre) {
+//   const book = myLibrary.find(obj => obj.id === bookId);
+//   book.title = title;
+//   book.author = author;
+//   book.yearPublished = yearPublished;
+//   book.genre = genre;
+// }
 
 // Handling a modal
 const actionButton = document.querySelector('.book-display + button');
@@ -58,13 +73,14 @@ actionButton.addEventListener(
 
 dialog.addEventListener(
   'close',
-  (e) => {
+  () => {
     if (dialog.returnValue) {
       let [title, author, year, genre, bookId] = dialog.returnValue.split(',');
       if (bookId) {
-        updateBook(bookId, title, author, year, genre)
+        const book = myLibrary[bookId];
+        book.updatedProperties = [title, author, year, genre];
       } else {
-        addNewBook(title, author, year, genre);
+        new Book(title, author, year, genre);
       }
       displayBooks();
     }
@@ -76,7 +92,7 @@ dialog.addEventListener(
 function displayBooks() {
   const bookshelf = document.querySelector('.book-display');
   bookshelf.innerHTML = "";
-  for (let book of myLibrary) {
+  for (let book of Object.values(myLibrary)) {
     let bookCard = document.createElement('div');
 
     let bookTitle = document.createElement('span');
@@ -105,8 +121,7 @@ function displayBooks() {
     deleteButton.addEventListener(
       'click',
       () => {
-        let bookIndex = myLibrary.indexOf(book);
-        myLibrary.splice(bookIndex, 1);
+        delete myLibrary[book.id];
         displayBooks();
       }
     )
@@ -126,7 +141,7 @@ function displayBooks() {
     readToggleLabel.addEventListener(
       'click',
       () => {
-        book.read = !book.read;
+        book.toggleRead();
       }
     )
 
@@ -156,10 +171,12 @@ function displayBooks() {
 }
 
 // A temporary solution for setting initial values
-addNewBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", '1997', 'fantasy');
-addNewBook("The Hobbiet", "J. R. R. Tolkien", '1937', 'fantasy');
-addNewBook("Murder on the Orient Express", "Agatha Christie", '1934', 'detective');
-addNewBook("The Hound of the Baskervilles", "Sir A. Conan Doyle", '1902', 'fantasy');
-addNewBook("Heated Rivalry", "Rachel Reid", '2019', 'romance');
+const defaultBooks = [
+  new Book("Harry Potter and the Philosopher's Stone", "J. K. Rowling", '1997', 'fantasy'),
+  new Book("The Hobbiet", "J. R. R. Tolkien", '1937', 'fantasy'),
+  new Book("Murder on the Orient Express", "Agatha Christie", '1934', 'detective'),
+  new Book("The Hound of the Baskervilles", "Sir A. Conan Doyle", '1902', 'fantasy'),
+  new Book("Heated Rivalry", "Rachel Reid", '2019', 'romance'),
+]
 
 displayBooks();

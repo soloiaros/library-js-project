@@ -36,6 +36,8 @@ const ScreenManager = (() => {
   const genreSelect = dialog.querySelector('#genre');
   const bookId = dialog.querySelector('#id');
 
+  yearInput.max = (new Date()).getFullYear();
+
   yearInput.addEventListener(
     'focus', () => yearInput.select()
   )
@@ -43,7 +45,19 @@ const ScreenManager = (() => {
   submitButton.addEventListener(
     'click',
     (e) => {
-      e.preventDefault();
+      for (let inputField of [titleInput, authorInput, yearInput]) {
+        if (inputField.validity.valueMissing) {
+          inputField.setCustomValidity('Hey, I expected at least something here.');
+          return;
+        } else if (inputField.validity.rangeOverflow) {
+          inputField.setCustomValidity("What's with that year my friend? 🤨");
+          return;
+        } else if (inputField.validity.tooLong) {
+          inputField.setCustomValidity('Woah. You sure this is the real name?');
+          return;
+        }
+        inputField.setCustomValidity('');
+      }
       dialog.close([
         titleInput.value, authorInput.value,
         yearInput.value, genreSelect.value,
